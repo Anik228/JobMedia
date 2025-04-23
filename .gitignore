@@ -1,0 +1,64 @@
+## Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio settings
+.vs/
+.vscode/
+*.code-workspace
+
+## Build results
+bin/
+obj/
+
+## NuGet packages (optional to ignore if using package restore)
+packages/
+*.nupkg
+# Uncomment if using package restore:
+# !packages/repositories.config
+
+## ASP.NET temp and cache files
+App_Data/
+*.mdf
+*.ldf
+
+## IIS Express
+*.vspscc
+*.vspcc
+*.dbmdl
+*.dbproj.schemaview
+*.dbproj.user
+*.dbproj.vspscc
+
+## Web publish
+*.Publish.xml
+publish/
+
+## Transform files (optional)
+Web.Debug.config
+Web.Release.config
+
+## ReSharper & Rider
+_ReSharper*/
+*.DotSettings.user
+.idea/
+
+## Logs and temporary files
+*.log
+*.tmp
+
+## Test results
+TestResults/
+*.trx
+
+## Others
+*.bak
+*.orig
+*.cache
+*.zip
+
+## Optional: compiled Razor views (if precompiled)
+obj/Debug/Views/
+obj/Release/Views/
