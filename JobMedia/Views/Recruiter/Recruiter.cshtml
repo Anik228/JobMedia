@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Recruiter";
+}
+
+@section Styles {
+    <link href="~/Content/css_/RecruiterHome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+}
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="col-md-2 sidebar">
+        <h4 class="text-center">Dashboard</h4>
+        <hr>
+        <a href="#" id="profile"><i class="fas fa-user"></i> Profile</a>
+        <a href="#" id="postJobBtn"><i class="fas fa-briefcase"></i> Post a Job</a>
+        <a href="#" id="allJobsBtn"><i class="fas fa-list"></i> All Posted Jobs</a>
+        <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-10 content" id="mainContent">
+        <h2>Main Content Area</h2>
+        <p>Select an option from the sidebar to display content here.</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#postJobBtn").click(function (e) {
+                e.preventDefault();
+                $("#mainContent").load('@Url.Action("RecruiterPostForm", "Recruiter")');
+            });
+
+            $("#allJobsBtn").click(function (e) {
+                e.preventDefault();
+                $("#mainContent").load('@Url.Action("AllJobs", "Recruiter")');
+            });
+
+            $("#profile").click(function (e) {
+                e.preventDefault();
+                $("#mainContent").load('@Url.Action("Profile", "Recruiter")');
+            });
+
+            $("#logout").click(function (e) {
+                e.preventDefault();
+                window.location.href = '@Url.Action("Logout", "Home")';
+            });
+        });
+    </script>
+}
