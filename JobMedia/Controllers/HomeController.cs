@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.Security;
 using JobMedia.Helpers;
 using JobMedia.Models;
 
@@ -51,6 +52,52 @@ namespace JobMedia.Controllers
         //    //return View(login);
         //}
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Login(LoginDto login)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(login);
+
+        //    var user = db.User.FirstOrDefault(u => u.Email == login.Email && !u.IsDeleted);
+
+        //    if (user != null && BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
+        //    {
+        //        string role="Employer";
+
+        //        if (user.IsAdmin)
+        //            role = "Admin";
+        //        else if (user.IsRecruiter)
+        //            role = "Recruiter";
+        //        else if (user.IsEmployer)
+        //            role = "Employer";
+        //        string token = JwtHelper.GenerateToken(user.Email, role);
+
+        //        System.Diagnostics.Debug.WriteLine("Generated token: " + token);
+
+
+        //        Response.Cookies.Add(new HttpCookie("jwtToken")
+        //        {
+        //            Value = token,
+        //            Expires = DateTime.Now.AddHours(1),
+        //            HttpOnly = true
+        //        });
+
+        //        TempData["Success"] = "Login successful!";
+
+
+        //        if (role == "Recruiter")
+        //            return RedirectToAction("Recruiter", "Recruiter");
+        //        else if (role == "Admin")
+        //            return RedirectToAction("Admin", "Admin");
+
+        //        return RedirectToAction("Employer", "Employer");
+        //    }
+
+        //    ModelState.AddModelError("", "Invalid email or password");
+        //    return View(login);
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginDto login)
@@ -59,10 +106,9 @@ namespace JobMedia.Controllers
                 return View(login);
 
             var user = db.User.FirstOrDefault(u => u.Email == login.Email && !u.IsDeleted);
-
             if (user != null && BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
             {
-                string role="Employer";
+                string role = "Employer";
 
                 if (user.IsAdmin)
                     role = "Admin";
@@ -70,21 +116,12 @@ namespace JobMedia.Controllers
                     role = "Recruiter";
                 else if (user.IsEmployer)
                     role = "Employer";
-                string token = JwtHelper.GenerateToken(user.Email, role);
 
-                System.Diagnostics.Debug.WriteLine("Generated token: " + token);
-
-
-                Response.Cookies.Add(new HttpCookie("jwtToken")
-                {
-                    Value = token,
-                    Expires = DateTime.Now.AddHours(1),
-                    HttpOnly = true
-                });
+                // Use FormsAuthentication instead of JWT for built-in auth
+                FormsAuthentication.SetAuthCookie(user.Email, false);
 
                 TempData["Success"] = "Login successful!";
 
-               
                 if (role == "Recruiter")
                     return RedirectToAction("Recruiter", "Recruiter");
                 else if (role == "Admin")
@@ -95,13 +132,21 @@ namespace JobMedia.Controllers
 
             ModelState.AddModelError("", "Invalid email or password");
             return View(login);
+
         }
+
+        //public ActionResult Logout()
+        //{
+        //    Session.Clear(); 
+        //    return RedirectToAction("Login", "Home");
+        //}
 
         public ActionResult Logout()
         {
-            Session.Clear(); 
+            FormsAuthentication.SignOut(); 
             return RedirectToAction("Login", "Home");
         }
+
 
         [HttpGet]
         public ActionResult Signup()
