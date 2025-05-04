@@ -20,6 +20,7 @@ body {
 .login-container {
     display: flex;
     align-items: center;
+    margin-top: 60px;
     justify-content: center;
     height: 100vh;
 }
@@ -149,4 +150,21 @@ body {
         .forgot-password a:hover {
             color: var(--primary-color);
             text-decoration: underline;
-        }
+     }
+
+
+.alert-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    margin-top: 50px;
+   
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 100%;
+    max-width: 500px; 
+}
+
+.alert {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

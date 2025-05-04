@@ -1,4 +1,5 @@
 ﻿@* Views/Recruiter/Profile.cshtml *@
+@model JobMedia.Models.User
 
 
 @section Styles {
@@ -12,19 +13,25 @@
     </div>
 
     <div class="profile-info">
+
         <div class="form-group mb-3">
-            <label>Full Name</label>
-            <input type="text" class="form-control" value="John Doe" readonly />
+            <label>Name</label>
+            <input type="text" class="form-control" value="@Model.Name" readonly />
         </div>
 
         <div class="form-group mb-3">
             <label>Email</label>
-            <input type="email" class="form-control" value="john.doe@example.com" readonly />
+            <input type="email" class="form-control" value="@Model.Email" readonly />
         </div>
 
         <div class="form-group mb-3">
             <label>Company Name</label>
             <input type="text" class="form-control" value="Tech Solutions Inc." readonly />
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Gender</label>
+            <input type="text" class="form-control" value="@Model.Gender" readonly />
         </div>
 
         <div class="form-group mb-3">
@@ -36,6 +43,7 @@
             <label>Address</label>
             <textarea class="form-control" rows="2" readonly>1234 Silicon Avenue, Tech City</textarea>
         </div>
+
     </div>
 
     <div class="edit-btn">

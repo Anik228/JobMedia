@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.UI.WebControls;
 using JobMedia.Helpers;
 using JobMedia.Models;
 
@@ -34,6 +35,7 @@ namespace JobMedia.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult Login()
         {
             ViewBag.Message = "Login page.";
@@ -41,64 +43,10 @@ namespace JobMedia.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-
-        //public ActionResult Login(LoginDto login)
-        //{
-        //    ViewBag.Message = "Login page.";
-
-        //    return RedirectToAction("Recruiter", "Recruiter");
-        //    //return View(login);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Login(LoginDto login)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return View(login);
-
-        //    var user = db.User.FirstOrDefault(u => u.Email == login.Email && !u.IsDeleted);
-
-        //    if (user != null && BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
-        //    {
-        //        string role="Employer";
-
-        //        if (user.IsAdmin)
-        //            role = "Admin";
-        //        else if (user.IsRecruiter)
-        //            role = "Recruiter";
-        //        else if (user.IsEmployer)
-        //            role = "Employer";
-        //        string token = JwtHelper.GenerateToken(user.Email, role);
-
-        //        System.Diagnostics.Debug.WriteLine("Generated token: " + token);
-
-
-        //        Response.Cookies.Add(new HttpCookie("jwtToken")
-        //        {
-        //            Value = token,
-        //            Expires = DateTime.Now.AddHours(1),
-        //            HttpOnly = true
-        //        });
-
-        //        TempData["Success"] = "Login successful!";
-
-
-        //        if (role == "Recruiter")
-        //            return RedirectToAction("Recruiter", "Recruiter");
-        //        else if (role == "Admin")
-        //            return RedirectToAction("Admin", "Admin");
-
-        //        return RedirectToAction("Employer", "Employer");
-        //    }
-
-        //    ModelState.AddModelError("", "Invalid email or password");
-        //    return View(login);
-        //}
+        
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginDto login)
         {
@@ -149,12 +97,14 @@ namespace JobMedia.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult Signup()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Signup(User model)
         {
@@ -165,18 +115,20 @@ namespace JobMedia.Controllers
                     model.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
                     model.IsAdmin = false;
                     model.IsDeleted = false;
+
+                    var user = db.User.FirstOrDefault(u => u.Email == model.Email && !u.IsDeleted);
+
+                    if (user != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("User mail already registered ");
+                        TempData["Error"] = "This email is already registered. Please log in or use a different email.";
+                        return View(model); 
+                    }
+
                     db.User.Add(model);
+                    db.SaveChanges();
 
-                    
-                    db.Database.Log = message => System.Diagnostics.Debug.WriteLine(message);
-
-                    int rows = db.SaveChanges();
-                    System.Diagnostics.Debug.WriteLine("Rows affected: " + rows);
-
-                   
-                    System.Diagnostics.Debug.WriteLine("User ID after save: " + model.Id);
-
-                    TempData["Success"] = "Signup successful!";
+                    TempData["Success"] = "Signup successful! Please log in.";
                     return RedirectToAction("Login", "Home");
                 }
                 catch (Exception ex)

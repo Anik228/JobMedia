@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using JobMedia.Models;
 
 namespace JobMedia.Controllers
 {
     [Authorize]
     public class RecruiterController : Controller
     {
-        
+
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         public ActionResult Recruiter()
         {
             return View();
@@ -27,7 +30,28 @@ namespace JobMedia.Controllers
 
         public ActionResult Profile()
         {
-            return PartialView("Profile");
+            string userEmail = User.Identity.Name;
+
+          
+            var user = db.User.FirstOrDefault(u => u.Email == userEmail && !u.IsDeleted);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+           
+            var profile = new User
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Gender = user.Gender,
+              
+            };
+
+        
+
+            return PartialView(profile);
         }
     }
 }
