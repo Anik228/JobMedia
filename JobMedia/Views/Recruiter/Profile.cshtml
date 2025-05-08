@@ -1,6 +1,4 @@
-﻿@* Views/Recruiter/Profile.cshtml *@
-@model JobMedia.Models.User
-
+﻿@model JobMedia.Models.User
 
 @section Styles {
     <link href="~/Content/css_/RecruiterProfile.css" rel="stylesheet" />
@@ -13,41 +11,48 @@
     </div>
 
     <div class="profile-info">
+        @using (Html.BeginForm("UpdateProfile", "Recruiter", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="form-group mb-3">
-            <label>Name</label>
-            <input type="text" class="form-control" value="@Model.Name" readonly />
-        </div>
+            <div class="form-group mb-3">
+                <label>Name</label>
+                <input type="text" class="form-control" name="Name" value="@Model.Name" />
+            </div>
 
-        <div class="form-group mb-3">
-            <label>Email</label>
-            <input type="email" class="form-control" value="@Model.Email" readonly />
-        </div>
+            <div class="form-group mb-3">
+                <label>Email</label>
+                <input type="email" class="form-control" name="Email" value="@Model.Email" readonly />
+            </div>
 
-        <div class="form-group mb-3">
-            <label>Company Name</label>
-            <input type="text" class="form-control" value="Tech Solutions Inc." readonly />
-        </div>
+            <div class="form-group mb-3">
+                <label>Company Name</label>
+                <input type="text" class="form-control" name="CompanyName" value="TBA" />
+            </div>
 
-        <div class="form-group mb-3">
-            <label>Gender</label>
-            <input type="text" class="form-control" value="@Model.Gender" readonly />
-        </div>
+            <div class="form-group mb-3">
+                <label>Gender</label>
+                <select class="form-control" name="Gender">
+                    <option value="Male" @(Model.Gender == "Male" ? "selected" : "")>Male</option>
+                    <option value="Female" @(Model.Gender == "Female" ? "selected" : "")>Female</option>
+                    <option value="Other" @(Model.Gender == "Other" ? "selected" : "")>Other</option>
+                </select>
+            </div>
 
-        <div class="form-group mb-3">
-            <label>Phone Number</label>
-            <input type="text" class="form-control" value="+1 234 567 890" readonly />
-        </div>
+            <div class="form-group mb-3">
+                <label>Phone Number</label>
+                <input type="text" class="form-control" name="PhoneNumber" value="TBA" />
+            </div>
 
-        <div class="form-group mb-3">
-            <label>Address</label>
-            <textarea class="form-control" rows="2" readonly>1234 Silicon Avenue, Tech City</textarea>
-        </div>
+            <div class="form-group mb-3">
+                <label>Address</label>
+                <textarea class="form-control" name="Address" rows="2">TBA</textarea>
+            </div>
 
-    </div>
-
-    <div class="edit-btn">
-        <button class="btn btn-primary"><i class="fas fa-edit"></i> Edit Profile</button>
+            <div class="edit-btn">
+                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save Changes</button>
+                <a href="@Url.Action("Profile", "Recruiter")" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
+            </div>
+        }
     </div>
 </div>
-
